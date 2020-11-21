@@ -1,0 +1,13 @@
+{
+    "files.eol": "\n",
+    "terminal.integrated.env.windows": {
+        "PATH": "${env:PATH};/Library/Frameworks/Python.framework/Versions/3.6/bin"
+    },
+    "python.pythonPath": "/usr/local/bin/python3",
+    "python.autoComplete.extraPaths": [
+        "./stocker"
+    ],
+    "python.analysis.extraPaths": [
+        "./stocker"
+    ]
+}
