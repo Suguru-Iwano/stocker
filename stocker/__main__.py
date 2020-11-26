@@ -4,7 +4,7 @@
 from datetime import datetime as dt
 from argparse import ArgumentParser, Namespace
 
-from app import *
+from walker import *
 from tools import *
 
 JPX_BRAND_EXCELL = 'https://www.jpx.co.jp/markets/statistics-equities/misc/tvdivq0000001vg2-att/data_j.xls'
@@ -40,23 +40,23 @@ def main():
     logger.info('START ' + mode)
 
     try:
-        if mode == 'GET_NEW_BRAND':
-            insert_brands_to_db(mode='new')
-
-        elif mode == 'GET_DELETE_BRAND':
-            insert_brands_to_db(mode='delete')
-
-        elif mode == 'DOWNLOAD_DAILY_DATA':
-            walker = TraderswebWalker()
+        if mode == 'DOWNLOAD_DAILY_DATA':
+            walker = TwebWalker()
             walker.save_all_stockhtml()
             logger.debug('daily data download is complete.')
 
         elif mode == 'INSTALL_DAILY_DATA':
-            walker = TraderswebWalker()
+            walker = TwebWalker()
             if date:
                 walker.date = date
             walker.get_all_stockdata_fromhtml()
             logger.debug('daily data install is complete.')
+
+        # elif mode == 'GET_NEW_BRAND':
+        #     insert_brands_to_db(mode='new')
+
+        # elif mode == 'GET_DELETE_BRAND':
+        #     insert_brands_to_db(mode='delete')
 
     except Exception as e:
         logger.exception(e)

@@ -9,20 +9,21 @@ import requests
 from bs4 import BeautifulSoup
 from retry import retry
 
-from config import AppConfig, DBConfig
+from config import TwebConfig, DBConfig
 from tools import *
+from dba import *
 
 
-class TraderswebWalker():
+class TwebWalker():
 
     def __init__(self):
         self.logger = get_logger()
-        self.conf = AppConfig()
+        self.conf = TwebConfig()
         self.date: dt = dt.today()  # ファイル読み書き用
 
     @retry(tries=10, delay=60, backoff=2)
     def _get_stockHtml_byte(self, code):
-        target_url = self.conf.Tweb.Url.INFO.format(code)
+        target_url = self.conf.Url.STOCK_INFO.format(code)
         # Requestsを使って、webから取得
         res = requests.get(target_url)
         if 500 == res.status_code:
@@ -45,7 +46,7 @@ class TraderswebWalker():
             html: bytes = self._get_stockHtml_byte(code)
 
             if html:
-                with open(f'{self.conf.Tweb.HTML_DIR}{code}_{date_str}.html', 'wb') as file:
+                with open(f'{self.conf.HTML_DIR}{code}_{date_str}.html', 'wb') as file:
                     file.write(html)
                 self.logger.debug(f'downloaded html {code}')
             time.sleep(0.3)
@@ -73,7 +74,7 @@ class TraderswebWalker():
 
         # 銘柄テーブルの更新
         brand_dic = self._get_col_info_dic(
-            lx_soup, self.conf.Tweb.Xpath.brand)
+            lx_soup, self.conf.Xpath.brand)
         sql = f"""
             REPLACE {DBConfig.Table.Name.BRAND}
             SET TOKUSYOKU = '{brand_dic['TOKUSYOKU']}'
@@ -87,7 +88,7 @@ class TraderswebWalker():
 
         # 価格テーブルの更新
         price_dic = self._get_col_info_dic(
-            lx_soup, self.conf.Tweb.Xpath.raw_prices)
+            lx_soup, self.conf.Xpath.raw_prices)
         o = float(self.bef_castnum(price_dic['OPEN']))  # 始値
         h = float(self.bef_castnum(price_dic['HIGH']))  # 高値
         l = float(self.bef_castnum(price_dic['LOW']))  # 安値
@@ -105,7 +106,7 @@ class TraderswebWalker():
 
         # 詳細情報テーブルの更新
         detail_dic = self._get_col_info_dic(
-            lx_soup, self.conf.Tweb.Xpath.detail)
+            lx_soup, self.conf.Xpath.detail)
         tick = int(self.bef_castnum(detail_dic['TICK']))
         unit = int(self.bef_castnum(detail_dic['UNIT'].replace('百万', '')))
         tanisu = int(self.bef_castnum(detail_dic['TANISU']))
@@ -130,7 +131,7 @@ class TraderswebWalker():
         """保存したHTMLから要素を抜き出し、DBに保存
         """
         date_str = self.date.strftime('%Y%m%d')
-        for path in pathlib.Path(self.conf.Tweb.HTML_DIR).glob(f'*_{date_str}.html'):
+        for path in pathlib.Path(self.conf.HTML_DIR).glob(f'*_{date_str}.html'):
             code = path.name[:4]
             with open(path, 'r', encoding='sjis') as file:
                 html = file.read()
