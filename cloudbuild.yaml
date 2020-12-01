@@ -1,0 +1,15 @@
+steps:
+  # - name: 'gcr.io/cloud-builders/python'
+  #   args: ['test']
+
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+    - functions
+    - deploy
+    - stocker-daily
+    - --region           = asia-northeast1
+    - --entry-point      = __main__
+    - --ignore-file      = .gitignore, cloudbuild.yaml
+    - --ingress-settings = internal-only
+    - --memory           = 256MB
+    - --runtime          = python38
