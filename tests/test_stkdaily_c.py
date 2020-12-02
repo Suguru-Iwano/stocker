@@ -36,13 +36,13 @@ def test_get_random_vpn_ip_check_ip():
     assert _check_ip(get_random_vpn_ip())
 
 def test_request_with_proxy_no_proxy():
-    assert 200 = request_with_proxy('https://www.google.com/search').status_code
+    assert 200 == request_with_proxy('https://www.google.com/search').status_code
 
 def test_request_with_proxy_random_proxy():
     proxy = get_random_vpn_ip()
     # proxy が None でないことを保証
     assert proxy
-    assert 200 = request_with_proxy('https://www.google.com/search', proxy).status_code
+    assert 200 == request_with_proxy('https://www.google.com/search', proxy).status_code
 
 def test_request_with_proxy_err_illegal_proxy():
     try:
