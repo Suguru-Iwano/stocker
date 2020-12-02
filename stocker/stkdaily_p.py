@@ -19,24 +19,15 @@ class RetriableException(Exception):
     リトライするエラー
     これ以外は、エラー吐いて終了
     """
+    pass
 
-    def __init__(self):
-        pass
-
-    def __str__(self):
-        return "リトライ用（異常終了させる）"
 
 class FatalException(Exception):
     """
     リトライするエラー
     これ以外は、エラー吐いて終了
     """
-
-    def __init__(self):
-        pass
-
-    def __str__(self):
-        return "リトライ用（異常終了させる）"
+    pass
 
 
 def publish(project: str, topic: str, message: str) -> Future:
@@ -78,7 +69,7 @@ def main():
 
         # Publish(子の処理を起動)
         for code in dba.get_code_iter():
-            future:Future = publish(
+            future: Future = publish(
                 project_name,
                 topic_name,
                 code

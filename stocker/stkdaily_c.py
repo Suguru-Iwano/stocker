@@ -20,24 +20,16 @@ class RetriableException(Exception):
     リトライするエラー
     これ以外は、エラー吐いて終了
     """
+    pass
 
-    def __init__(self):
-        pass
-
-    def __str__(self):
-        return "リトライ用（異常終了させる）"
 
 class FatalException(Exception):
     """
     リトライするエラー
     これ以外は、エラー吐いて終了
     """
+    pass
 
-    def __init__(self):
-        pass
-
-    def __str__(self):
-        return "リトライ用（異常終了させる）"
 
 def get_event_data(event) -> str:
     return base64.b64decode(event['data']).decode('utf-8')
