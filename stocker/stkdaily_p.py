@@ -4,6 +4,7 @@ import os
 import time
 
 from google.cloud.pubsub_v1 import PublisherClient
+from google.cloud.pubsub_v1.futures import Future
 
 from dba import Dba
 from tools import get_logger
@@ -25,8 +26,20 @@ class RetriableException(Exception):
     def __str__(self):
         return "リトライ用（異常終了させる）"
 
+class FatalException(Exception):
+    """
+    リトライするエラー
+    これ以外は、エラー吐いて終了
+    """
 
-def publish(project: str, topic: str, message: str):
+    def __init__(self):
+        pass
+
+    def __str__(self):
+        return "リトライ用（異常終了させる）"
+
+
+def publish(project: str, topic: str, message: str) -> Future:
     """Pub/Sub の Publish 実行
 
     Args:
@@ -35,11 +48,11 @@ def publish(project: str, topic: str, message: str):
         message (str): 送信するメッセージ
     """
     if not project or not topic:
-        raise Exception("Project or topic is None or blank.")
+        raise FatalException("Project or topic is None or blank.")
 
     publisher = PublisherClient()
 
-    publisher.publish(
+    return publisher.publish(
         # トピックのパス
         publisher.topic_path(project, topic),
         # str -> byte に変換
@@ -57,7 +70,7 @@ def main():
         project_name: str = os.getenv(ENV_KEY_PROJECT)
         topic_name: str = os.getenv(ENV_KEY_TOPIC)
         if not max_exec_sec_str or not project_name or not topic_name:
-            raise Exception("Please set environment parameter.")
+            raise FatalException("Please set environment parameter.")
 
         dba = Dba()
         # 待ち時間：全体の実行時間 / 処理数
@@ -65,11 +78,12 @@ def main():
 
         # Publish(子の処理を起動)
         for code in dba.get_code_iter():
-            publish(
+            future:Future = publish(
                 project_name,
                 topic_name,
                 code
             )
+            get_logger().info(str(future.result()))
             time.sleep(wait_sec)
 
     except RetriableException:

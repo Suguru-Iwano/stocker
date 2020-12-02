@@ -4,6 +4,7 @@ import base64
 import random
 import time
 import requests
+from requests import Request
 import random
 import os
 
@@ -26,6 +27,17 @@ class RetriableException(Exception):
     def __str__(self):
         return "リトライ用（異常終了させる）"
 
+class FatalException(Exception):
+    """
+    リトライするエラー
+    これ以外は、エラー吐いて終了
+    """
+
+    def __init__(self):
+        pass
+
+    def __str__(self):
+        return "リトライ用（異常終了させる）"
 
 def get_event_data(event) -> str:
     return base64.b64decode(event['data']).decode('utf-8')
@@ -60,7 +72,7 @@ def _check_ip(ip_str: str) -> bool:
         return False
 
 
-def request_with_proxy(target_url: str, proxy='': str) -> Request:
+def request_with_proxy(target_url: str, proxy='') -> Request:
     """TradersWeb の 1銘柄のHTMLを返す
 
     Args:
@@ -79,7 +91,7 @@ def request_with_proxy(target_url: str, proxy='': str) -> Request:
                 'https': f'http://{proxy}'
             }
         else:
-            raise Exception('Iregal proxy.')
+            raise FatalException('Iregal proxy.')
 
     return requests.get(target_url, proxies=proxies)
 
@@ -103,14 +115,14 @@ def main(event, context):
         # 環境情報を取得とチェック
         max_exec_sec_str: str = os.getenv(ENV_KEY_MAX_EXEC_SEC)
         if not max_exec_sec_str:
-            raise Exception("Please set environment parameter.")
+            raise FatalException("Please set environment parameter.")
 
         # サーバに負荷をかけないように、、、
         random_sleep(float(max_exec_sec_str))
 
         # pubsubからデータを取得
         stock_code: str = get_event_data(event)
-        response: Response = request_with_proxy(
+        response = request_with_proxy(
             STOCK_INFO_URL.format(stock_code),
             get_random_vpn_ip()
         )

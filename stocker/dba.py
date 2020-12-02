@@ -1,18 +1,15 @@
 # coding: utf-8
 
-from datetime import datetime as dt
+from typing import Any, Iterator
 
 from google.cloud.bigquery import Client
-
-from config import DBConfig
 
 
 class Dba():
     def __init__(self) -> None:
         self.client: Client = Client()
-        self.conf = DBConfig()
 
-    def _execute(self, query: str):
+    def _execute(self, query: str) -> Any:
         query_job = self.client.query(query)
         result_iter = query_job.result()
         return result_iter
@@ -24,7 +21,7 @@ class Dba():
             SELECT COUNT(*) FROM brand;
         """)
 
-    def get_code_iter(self):
+    def get_code_iter(self) -> Iterator:
         """銘柄のiteratorを返す
         """
         return self._execute(f"""

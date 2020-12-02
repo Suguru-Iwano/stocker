@@ -6,7 +6,7 @@ from google.cloud.logging_v2.client import Client
 from google.cloud.logging_v2.handlers import CloudLoggingHandler
 
 
-def get_logger(logger_name='stocker': str) -> Logger:
+def get_logger(logger_name='stocker') -> Logger:
     foramt = Formatter("%(asctime)s %(levelname)s: %(message)s")
 
     s_handler = StreamHandler()
