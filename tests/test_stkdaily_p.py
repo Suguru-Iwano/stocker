@@ -4,6 +4,7 @@ import os
 
 from stocker.stkdaily_p import *
 
+
 def test_publish1():
     publish(os.getenv(ENV_KEY_PROJECT), os.getenv(ENV_KEY_TOPIC), None)
 
@@ -20,6 +21,7 @@ def test_publish_err1():
     else:
         assert False
 
+
 def test_publish_err2():
     try:
         publish('project', None, None)
@@ -27,4 +29,3 @@ def test_publish_err2():
         assert True
     else:
         assert False
-
