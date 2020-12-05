@@ -1,7 +1,7 @@
  steps:
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: [ 'build', '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/stocker-docker-repo/quickstart-image:tag1',  './cloudbuild/'  ]
+    args: [ 'build', '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/stocker-docker-repo/quickstart-image:tag1',  '/workspace/stocker/cloudbuild/'  ]
     dir: 'stocker'
 
   - name: 'gcr.io/cloud-builders/docker'
