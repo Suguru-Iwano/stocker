@@ -18,7 +18,7 @@
     - -c
     - |
       ls -la
-      pip install -r requirements.txt
+      pip install -r cloudbuild/requirements.txt
       cd stocker/tests
       pytest -s ./
 
