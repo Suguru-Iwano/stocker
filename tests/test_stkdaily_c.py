@@ -51,7 +51,7 @@ def test_request_with_proxy_random_proxy():
     # proxy が None でないことを保証
     assert proxy
     assert 200 == request_with_proxy(
-        'https://www.google.com/search', proxy).status_code
+        'https://www.google.com/search', '219.100.37.183').status_code
 
 
 def test_request_with_proxy_err_illegal_proxy():
