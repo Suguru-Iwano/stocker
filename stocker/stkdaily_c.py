@@ -53,14 +53,14 @@ def get_random_vpn_ip() -> str:
     return random.choice(servers)[1]
 
 
-def _check_ip(ip_str: str) -> bool:
+def _is_valid_ip(ip_str: str) -> bool:
     """文字列がIPアドレスのパターンかチェック
     """
-    import socket
+    import ipaddress
     try:
-        socket.inet_aton(ip_str)
+        ipaddress.ip_address(ip_str)
         return True
-    except Exception:
+    except:
         return False
 
 
@@ -77,7 +77,7 @@ def request_with_proxy(target_url: str, proxy='') -> Request:
     # プロキシを設定
     proxies = None
     if proxy:
-        if _check_ip(proxy):
+        if _is_valid_ip(proxy):
             proxies = {
                 'http': f'http://{proxy}',
                 'https': f'http://{proxy}'

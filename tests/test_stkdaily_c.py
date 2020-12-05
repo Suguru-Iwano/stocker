@@ -1,7 +1,7 @@
 # coding: utf-8
 
 from stocker.stkdaily_c import *
-from stocker.stkdaily_c import _check_ip
+from stocker.stkdaily_c import _is_valid_ip
 
 
 def test_random_sleep_no_err():
@@ -13,36 +13,36 @@ def test_random_sleep_no_err():
         assert True
 
 
-def test_check_ip_true_all_0():
-    assert _check_ip('000.000.000.000')
+def test_is_valid_ip_true_all_0():
+    assert _is_valid_ip('000.000.000.000')
 
 
-def test_check_ip_true_all_9():
-    assert _check_ip('999.999.999.999')
+def test_is_valid_ip_true_all_9():
+    assert _is_valid_ip('999.999.999.999')
 
 
-def test_check_ip_true_random():
-    assert _check_ip('123.456.789.012')
+def test_is_valid_ip_true_random():
+    assert _is_valid_ip('123.456.789.012')
 
 
-def test_check_ip_false_a():
-    assert not _check_ip('000.0a0.000.000')
+def test_is_valid_ip_false_a():
+    assert not _is_valid_ip('000.0a0.000.000')
 
 
-def test_check_ip_false_a_ja():
-    assert not _check_ip('000.0あ0.000.000')
+def test_is_valid_ip_false_a_ja():
+    assert not _is_valid_ip('000.0あ0.000.000')
 
 
-def test_check_ip_false_none():
-    assert not _check_ip('000.00.000.000')
+def test_is_valid_ip_false_none():
+    assert not _is_valid_ip('000.00.000.000')
 
 
-def test_check_ip_false_all_space():
-    assert not _check_ip('000.0 0.000.000')
+def test_is_valid_ip_false_all_space():
+    assert not _is_valid_ip('000.0 0.000.000')
 
 
-def test_get_random_vpn_ip_check_ip():
-    assert _check_ip(get_random_vpn_ip())
+def test_get_random_vpn_ip_is_valid_ip():
+    assert _is_valid_ip(get_random_vpn_ip())
 
 
 def test_request_with_proxy_no_proxy():

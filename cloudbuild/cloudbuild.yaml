@@ -37,5 +37,6 @@
     - --memory           = 256MB
     - --runtime          = python38
 
+# 置換用（vscode上、エラーになるけどいける）
 substitutions:
   _PS_TOPIC_NAME: pubsub_topic
