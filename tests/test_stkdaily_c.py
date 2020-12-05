@@ -13,16 +13,12 @@ def test_random_sleep_no_err():
         assert True
 
 
-def test_is_valid_ip_true_all_0():
+def test_is_valid_ip_true_min():
     assert _is_valid_ip('000.000.000.000')
 
 
-def test_is_valid_ip_true_all_9():
-    assert _is_valid_ip('999.999.999.999')
-
-
-def test_is_valid_ip_true_random():
-    assert _is_valid_ip('123.456.789.012')
+def test_is_valid_ip_true_max():
+    assert _is_valid_ip('255.255.255.255')
 
 
 def test_is_valid_ip_false_a():
@@ -34,7 +30,7 @@ def test_is_valid_ip_false_a_ja():
 
 
 def test_is_valid_ip_false_none():
-    assert not _is_valid_ip('000.00.000.000')
+    assert not _is_valid_ip('000..000.000')
 
 
 def test_is_valid_ip_false_all_space():

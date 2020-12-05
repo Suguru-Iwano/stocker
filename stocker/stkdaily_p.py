@@ -30,7 +30,7 @@ class FatalException(Exception):
     pass
 
 
-def publish(project: str, topic: str, message: str) -> Future:
+def publish(project: str, topic: str, message='') -> Future:
     """Pub/Sub の Publish 実行
 
     Args:

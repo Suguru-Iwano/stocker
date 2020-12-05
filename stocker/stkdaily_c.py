@@ -36,7 +36,7 @@ def get_event_data(event) -> str:
 
 
 def random_sleep(max_sleep_sec) -> None:
-    time.sleep(random.random(0, max_sleep_sec))
+    time.sleep(random.uniform(0, max_sleep_sec))
 
 
 def get_random_vpn_ip() -> str:
