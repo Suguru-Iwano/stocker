@@ -10,8 +10,8 @@ from stocker.dba import Dba
 from stocker.tools import get_logger
 
 ENV_KEY_MAX_EXEC_SEC = 'MAX_EXEC_SEC'
-ENV_KEY_PROJECT = 'GOOGLE_CLOUD_PROJECT'
-ENV_KEY_TOPIC = 'GOOGLE_CLOUD_TOPIC'
+ENV_KEY_PROJECT = 'PROJECT'
+ENV_KEY_TOPIC = 'TOPIC'
 
 
 class RetriableException(Exception):

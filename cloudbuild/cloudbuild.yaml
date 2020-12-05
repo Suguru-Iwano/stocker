@@ -19,6 +19,10 @@
     - |
       pip install -r cloudbuild/requirements.txt
       pytest -s ./
+    env:
+    - 'PROJECT=$PROJECT_ID'
+    - 'TOPIC=$_PS_TOPIC_NAME'
+
 
   - name: 'gcr.io/cloud-builders/gcloud'
     id: Deploy
@@ -32,3 +36,6 @@
     - --ingress-settings = internal-only
     - --memory           = 256MB
     - --runtime          = python38
+
+substitutions:
+  _PS_TOPIC_NAME: pubsub_topic
