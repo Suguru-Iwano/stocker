@@ -1,4 +1,4 @@
-steps:
+ steps:
 
   - name: 'gcr.io/cloud-builders/docker'
     args: [ 'build', '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/stocker-docker-repo/quickstart-image:tag1', '-f', 'stocker/cloudbuild/Dockerfile', '.' ]
