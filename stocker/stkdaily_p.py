@@ -6,8 +6,8 @@ import time
 from google.cloud.pubsub_v1 import PublisherClient
 from google.cloud.pubsub_v1.futures import Future
 
-from dba import Dba
-from tools import get_logger
+from stocker.dba import Dba
+from stocker.tools import get_logger
 
 ENV_KEY_MAX_EXEC_SEC = 'MAX_EXEC_SEC'
 ENV_KEY_PROJECT = 'GOOGLE_CLOUD_PROJECT'

@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from logging import StreamHandler, Formatter, Logger, getLogger, DEBUG, INFO
+from logging import DEBUG, INFO, Formatter, Logger, StreamHandler, getLogger
 
 from google.cloud.logging_v2.client import Client
 from google.cloud.logging_v2.handlers import CloudLoggingHandler
