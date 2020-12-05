@@ -39,7 +39,7 @@ def random_sleep(max_sleep_sec) -> None:
     time.sleep(random.uniform(0, max_sleep_sec))
 
 
-def get_random_vpn_ip() -> str:
+def get_random_vpn_host() -> str:
     """VPN Gate の VPN の中から、ランダムな1つのIPを返す
 
     Returns:
@@ -50,7 +50,7 @@ def get_random_vpn_ip() -> str:
     labels = servers[1]
     labels[0] = labels[0][1:]
     servers = [s for s in servers[2:] if len(s) > 1]
-    return random.choice(servers)[1]
+    return random.choice(servers)[0]
 
 
 def _is_valid_ip(ip_str: str) -> bool:
@@ -64,7 +64,7 @@ def _is_valid_ip(ip_str: str) -> bool:
         return False
 
 
-def request_with_proxy(target_url: str, proxy='') -> Request:
+def request_with_proxy(target_url: str, proxy: str, port: str) -> Request:
     """TradersWeb の 1銘柄のHTMLを返す
 
     Args:
@@ -78,10 +78,16 @@ def request_with_proxy(target_url: str, proxy='') -> Request:
     proxies = None
     if proxy:
         if _is_valid_ip(proxy):
-            proxies = {
-                'http': f'http://{proxy}',
-                'https': f'http://{proxy}'
-            }
+            if port:
+                proxies = {
+                    'http': f'http://{proxy}',
+                    'https': f'http://{proxy}'
+                }
+            else:
+                proxies = {
+                    'http': f'http://{proxy}:{port}',
+                    'https': f'http://{proxy}:{port}'
+                }
         else:
             raise FatalException('Iregal proxy.')
 
