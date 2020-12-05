@@ -17,6 +17,7 @@
     args:
     - -c
     - |
+      ls -la
       pip install -r requirements.txt
       cd stocker/tests
       pytest -s ./
