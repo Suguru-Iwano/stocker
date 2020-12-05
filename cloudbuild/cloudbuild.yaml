@@ -17,9 +17,7 @@
     args:
     - -c
     - |
-      ls -la
       pip install -r cloudbuild/requirements.txt
-      cd stocker/tests
       pytest -s ./
 
   - name: 'gcr.io/cloud-builders/gcloud'

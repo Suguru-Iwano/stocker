@@ -60,7 +60,7 @@ def _check_ip(ip_str: str) -> bool:
     try:
         socket.inet_aton(ip_str)
         return True
-    except socket.error:
+    except Exception:
         return False
 
 

@@ -1,6 +1,7 @@
 # coding: utf-8
 
 import os
+import pytest
 
 from stocker.stkdaily_p import *
 
@@ -14,18 +15,10 @@ def test_publish2():
 
 
 def test_publish_err1():
-    try:
+    with pytest.raises(FatalException):
         publish('', 'topic', None)
-    except FatalException:
-        assert True
-    else:
-        assert False
 
 
 def test_publish_err2():
-    try:
+    with pytest.raises(FatalException):
         publish('project', None, None)
-    except FatalException:
-        assert True
-    else:
-        assert False
