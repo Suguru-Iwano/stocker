@@ -79,8 +79,8 @@ def request_with_proxy(target_url: str, proxy='') -> Request:
     if proxy:
         if _is_valid_ip(proxy):
             proxies = {
-                'http': f'http://{proxy}',
-                'https': f'http://{proxy}'
+                'http': f'http://{proxy}:443',
+                'https': f'http://{proxy}:443'
             }
         else:
             raise FatalException('Iregal proxy.')
