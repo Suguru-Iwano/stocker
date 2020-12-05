@@ -1,10 +1,5 @@
  steps:
 
-  - name: 'gcr.io/cloud-builders/docker'
-    args: [ 'build', '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/stocker-docker-repo/quickstart-image:tag1',  '/workspaces/stocker/cloudbuild/' ]
-
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['run', '--name', 'stocker-test', '--network', 'cloudbuild', '-p', '5000', '-d', 'stocker']
   - name: 'qnib/pytest'
     entrypoint: 'bash'
     args:
@@ -13,8 +8,8 @@
       pip install -r requirements.txt
       cd stocker/tests
       pytest -s ./
-    env:
-      - 'HOGE=fuga'
+    # env:
+    #   - 'HOGE=fuga'
 
   - name: 'gcr.io/cloud-builders/gcloud'
     args:
