@@ -1,6 +1,6 @@
  steps:
 
-  - name: 'qnib/pytest'
+  - name: 'docker.io/library/python:3.8'
     entrypoint: 'bash'
     args:
     - '-c'
