@@ -21,4 +21,5 @@ def test_publish_err1():
 
 def test_publish_err2():
     with pytest.raises(FatalException):
+
         publish('project', None, None)
