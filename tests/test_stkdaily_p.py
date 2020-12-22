@@ -1,17 +1,20 @@
 # coding: utf-8
 
 import os
-import pytest
 
-from stocker.stkdaily_p import *
+import pytest
+from stocker.stkdaily_p import (ENV_KEY_PROJECT, ENV_KEY_TOPIC, FatalException,
+                                publish)
 
 
 def test_publish_none_message():
-    publish(os.getenv(ENV_KEY_PROJECT), os.getenv(ENV_KEY_TOPIC), None)
+    publish(os.getenv(ENV_KEY_PROJECT) or '',
+            os.getenv(ENV_KEY_TOPIC) or '', None)
 
 
 def test_publish_yes_message():
-    publish(os.getenv(ENV_KEY_PROJECT), os.getenv(ENV_KEY_TOPIC), 'message')
+    publish(os.getenv(ENV_KEY_PROJECT) or '',
+            os.getenv(ENV_KEY_TOPIC) or '', 'message')
 
 
 def test_publish_err_no_project():

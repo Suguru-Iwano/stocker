@@ -2,9 +2,9 @@
 
 import os
 import time
+from typing import Any
 
-from google.cloud.pubsub_v1 import PublisherClient
-from google.cloud.pubsub_v1.futures import Future
+from google.cloud import pubsub_v1
 
 from stocker.dba import Dba
 from stocker.tools import get_logger
@@ -30,7 +30,7 @@ class FatalException(Exception):
     pass
 
 
-def publish(project: str, topic: str, message='') -> Future:
+def publish(project: str, topic: str, message='') -> Any:
     """Pub/Sub の Publish 実行
 
     Args:
@@ -41,11 +41,12 @@ def publish(project: str, topic: str, message='') -> Future:
     if not project or not topic:
         raise FatalException("Project or topic is None or blank.")
 
-    publisher = PublisherClient()
+    publisher = pubsub_v1.PublisherClient()
+    topic_path: str = f'projects/{project}/topics/{topic}'
 
     return publisher.publish(
         # トピックのパス
-        publisher.topic_path(project, topic),
+        topic_path,
         # str -> byte に変換
         message.encode()
     )
@@ -57,19 +58,20 @@ def main():
 
     try:
         # 環境情報を取得とチェック
-        max_exec_sec_str: str = os.getenv(ENV_KEY_MAX_EXEC_SEC)
-        project_name: str = os.getenv(ENV_KEY_PROJECT)
-        topic_name: str = os.getenv(ENV_KEY_TOPIC)
+        max_exec_sec_str: str = os.getenv(ENV_KEY_MAX_EXEC_SEC) or ''
+        project_name: str = os.getenv(ENV_KEY_PROJECT) or ''
+        topic_name: str = os.getenv(ENV_KEY_TOPIC) or ''
         if not max_exec_sec_str or not project_name or not topic_name:
             raise FatalException("Please set environment parameter.")
 
         dba = Dba()
         # 待ち時間：全体の実行時間 / 処理数
-        wait_sec = float(max_exec_sec_str) / dba.get_code_count()
+        code_iter = dba.get_code_iter()
+        wait_sec = float(max_exec_sec_str) / code_iter.total_rows
 
         # Publish(子の処理を起動)
-        for code in dba.get_code_iter():
-            future: Future = publish(
+        for code in code_iter:
+            future = publish(
                 project_name,
                 topic_name,
                 code

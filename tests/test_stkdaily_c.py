@@ -1,7 +1,9 @@
 # coding: utf-8
 
-from stocker.stkdaily_c import *
-from stocker.stkdaily_c import _is_valid_ip
+import time
+
+from stocker.stkdaily_c import (PROXY_LIST_URL, FatalException, _get_proxy_url,
+                                _is_valid_ip, random_sleep, request_with_proxy)
 
 
 def test_random_sleep_no_err():
@@ -37,30 +39,39 @@ def test_is_valid_ip_false_all_space():
     assert not _is_valid_ip('000.0 0.000.000')
 
 
-def test_get_random_vpn_ip_is_valid_ip():
-    assert _is_valid_ip(get_random_vpn_ip())
-
-
-def test_request_with_proxy_no_proxy():
-    assert 200 == request_with_proxy(
-        'https://www.google.com/search').status_code
-
-
 def test_request_with_proxy_random_proxy():
-    proxy = get_random_vpn_ip()
-    # proxy が None でないことを保証
-    assert proxy
+    time.sleep(1)
+    proxy_list_url = PROXY_LIST_URL
     assert 200 == request_with_proxy(
-        'https://www.google.com/search', get_random_vpn_host, '443').status_code
+        'https://www.bing.com/', proxy_list_url).status_code
 
 
-def test_request_with_proxy_err_illegal_proxy():
-    try:
-        request_with_proxy('https://www.google.com/search', 'dummy_proxy')
-    except FatalException:
-        assert True
-    else:
-        assert False
+def test_request_with_proxy_http_proxy():
+    time.sleep(1)
+    proxy_list_url = "https://www.proxyscan.io/api/proxy?type=http&format=json&limit=20"
+    assert 200 == request_with_proxy(
+        'https://www.bing.com/', proxy_list_url).status_code
+
+
+def test_request_with_proxy_https_proxy():
+    time.sleep(1)
+    proxy_list_url = "https://www.proxyscan.io/api/proxy?type=https&format=json&limit=20"
+    assert 200 == request_with_proxy(
+        'https://www.bing.com/', proxy_list_url).status_code
+
+
+def test_request_with_proxy_socks4_proxy():
+    time.sleep(1)
+    proxy_list_url = "https://www.proxyscan.io/api/proxy?type=socks4&format=json&limit=20"
+    assert 200 == request_with_proxy(
+        'https://www.bing.com/', proxy_list_url).status_code
+
+
+def test_request_with_proxy_socks5_proxy():
+    time.sleep(1)
+    proxy_list_url = "https://www.proxyscan.io/api/proxy?type=socks5&format=json&limit=20"
+    assert 200 == request_with_proxy(
+        'https://www.bing.com/', proxy_list_url).status_code
 
 # TODO:save_bytes_to_gdrive
 # TODO:insert_stock_data

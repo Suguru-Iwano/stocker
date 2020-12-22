@@ -3,6 +3,7 @@
 from typing import Any, Iterator
 
 from google.cloud.bigquery import Client
+from google.cloud.bigquery.table import RowIterator
 
 
 class Dba():
@@ -14,18 +15,11 @@ class Dba():
         result_iter = query_job.result()
         return result_iter
 
-    def get_code_count(self) -> int:
-        """銘柄の個数を返す
-        """
-        return self._execute(f"""
-            SELECT COUNT(*) FROM brand;
-        """)
-
-    def get_code_iter(self) -> Iterator:
+    def get_code_iter(self) -> RowIterator:
         """銘柄のiteratorを返す
         """
         return self._execute(f"""
-            SELECT DISTINCT code FROM brand;
+            SELECT DISTINCT code FROM stocker_dataset.brand;
         """)
 
     # def insert_brands_to_db(self, mode: str):
