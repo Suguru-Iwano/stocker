@@ -2,17 +2,8 @@
 
 import time
 
-from stocker.stkdaily_c import (PROXY_LIST_URL, FatalException, _get_proxy_url,
-                                _is_valid_ip, random_sleep, request_with_proxy)
-
-
-def test_random_sleep_no_err():
-    try:
-        random_sleep(0.005)
-    except:
-        assert False
-    else:
-        assert True
+from stocker.stkdaily_c import (PROXY_LIST_URL, FatalException, _get_proxy_list,
+                                _is_valid_ip, request_with_proxy)
 
 
 def test_is_valid_ip_true_min():

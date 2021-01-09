@@ -4,7 +4,16 @@ import os
 
 import pytest
 from stocker.stkdaily_p import (ENV_KEY_PROJECT, ENV_KEY_TOPIC, FatalException,
-                                publish)
+                                publish, random_sleep)
+
+
+def test_random_sleep_no_err():
+    try:
+        random_sleep(0.005)
+    except:
+        assert False
+    else:
+        assert True
 
 
 def test_publish_none_message():

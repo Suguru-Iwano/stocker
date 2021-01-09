@@ -2,8 +2,10 @@
 
 import os
 import time
+from random import random
 from typing import Any
 
+import requests
 from google.cloud import pubsub_v1
 
 from stocker.dba import Dba
@@ -12,6 +14,8 @@ from stocker.tools import get_logger
 ENV_KEY_MAX_EXEC_SEC = 'MAX_EXEC_SEC'
 ENV_KEY_PROJECT = 'PROJECT'
 ENV_KEY_TOPIC = 'TOPIC'
+
+# VPN_LIST_URL = 'http://www.vpngate.net/api/iphone/'
 
 
 class RetriableException(Exception):
@@ -28,6 +32,24 @@ class FatalException(Exception):
     これ以外は、エラー吐いて終了
     """
     pass
+
+
+# def _get_vps_list() -> list:
+#     """VPN Gate の VPN の中から、ランダムな1つのIPを返す
+
+#     Returns:
+#         str: Proxyの情報
+#     """
+#     vpn_data = requests.get(VPN_LIST_URL).text.replace('\r', '')
+#     servers = [line.split(',') for line in vpn_data.split('\n')]
+#     labels = servers[1]
+#     labels[0] = labels[0][1:]
+#     servers = [s for s in servers[2:] if len(s) > 1]
+#     return servers
+
+
+def random_sleep(max_sleep_sec) -> None:
+    time.sleep(random.uniform(0, max_sleep_sec))
 
 
 def publish(project: str, topic: str, message='') -> Any:
